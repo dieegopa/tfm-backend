@@ -1,0 +1,11 @@
+firebase_authentication:
+  project_id: '%env(string:FIREBASE_PROJECT_ID)%'
+
+  # The leeway to account for clock skew with Google servers
+  leeway: 0
+
+  # Used only by the authenticators with "cookie" strategy
+  cookie_name: sessionToken
+
+  # The field in the payload used to identify the user
+  user_identifier: sub
