@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,6 +24,22 @@ class User implements UserInterface
 
     #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
+
+    #[ORM\ManyToMany(targetEntity: University::class, inversedBy: 'users')]
+    private Collection $universities;
+
+    #[ORM\ManyToMany(targetEntity: Subject::class, inversedBy: 'users')]
+    private Collection $subjects;
+
+    #[ORM\ManyToMany(targetEntity: Degree::class, inversedBy: 'users')]
+    private Collection $degrees;
+
+    public function __construct()
+    {
+        $this->universities = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
+        $this->degrees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +104,78 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, University>
+     */
+    public function getUniversities(): Collection
+    {
+        return $this->universities;
+    }
+
+    public function addUniversity(University $university): self
+    {
+        if (!$this->universities->contains($university)) {
+            $this->universities->add($university);
+        }
+
+        return $this;
+    }
+
+    public function removeUniversity(University $university): self
+    {
+        $this->universities->removeElement($university);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subject>
+     */
+    public function getSubjects(): Collection
+    {
+        return $this->subjects;
+    }
+
+    public function addSubject(Subject $subject): self
+    {
+        if (!$this->subjects->contains($subject)) {
+            $this->subjects->add($subject);
+        }
+
+        return $this;
+    }
+
+    public function removeSubject(Subject $subject): self
+    {
+        $this->subjects->removeElement($subject);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Degree>
+     */
+    public function getDegrees(): Collection
+    {
+        return $this->degrees;
+    }
+
+    public function addDegree(Degree $degree): self
+    {
+        if (!$this->degrees->contains($degree)) {
+            $this->degrees->add($degree);
+        }
+
+        return $this;
+    }
+
+    public function removeDegree(Degree $degree): self
+    {
+        $this->degrees->removeElement($degree);
 
         return $this;
     }

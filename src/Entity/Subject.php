@@ -24,9 +24,13 @@ class Subject
     #[ORM\ManyToMany(targetEntity: Degree::class, mappedBy: 'subject')]
     private Collection $degrees;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'subjects')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->degrees = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,6 +84,33 @@ class Subject
     {
         if ($this->degrees->removeElement($degree)) {
             $degree->removeSubject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeSubject($this);
         }
 
         return $this;
