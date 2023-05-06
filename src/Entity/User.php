@@ -34,11 +34,15 @@ class User implements UserInterface
     #[ORM\ManyToMany(targetEntity: Degree::class, inversedBy: 'users')]
     private Collection $degrees;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: File::class)]
+    private Collection $files;
+
     public function __construct()
     {
         $this->universities = new ArrayCollection();
         $this->subjects = new ArrayCollection();
         $this->degrees = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +180,36 @@ class User implements UserInterface
     public function removeDegree(Degree $degree): self
     {
         $this->degrees->removeElement($degree);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, File>
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+            $file->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->removeElement($file)) {
+            // set the owning side to null (unless already changed)
+            if ($file->getUser() === $this) {
+                $file->setUser(null);
+            }
+        }
 
         return $this;
     }

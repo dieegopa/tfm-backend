@@ -27,10 +27,17 @@ class Subject
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'subjects')]
     private Collection $users;
 
+    #[ORM\ManyToOne(inversedBy: 'subjects')]
+    private ?Course $course = null;
+
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: File::class)]
+    private Collection $files;
+
     public function __construct()
     {
         $this->degrees = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +118,48 @@ class Subject
     {
         if ($this->users->removeElement($user)) {
             $user->removeSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
+    public function setCourse(?Course $course): self
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, File>
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+            $file->setSubject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): self
+    {
+        if ($this->files->removeElement($file)) {
+            // set the owning side to null (unless already changed)
+            if ($file->getSubject() === $this) {
+                $file->setSubject(null);
+            }
         }
 
         return $this;

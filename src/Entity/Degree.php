@@ -31,10 +31,17 @@ class Degree
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'degrees')]
     private Collection $users;
 
+    #[ORM\Column(length: 255)]
+    private ?string $school = null;
+
+    #[ORM\OneToMany(mappedBy: 'degree', targetEntity: Course::class)]
+    private Collection $courses;
+
     public function __construct()
     {
         $this->subject = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->courses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +131,48 @@ class Degree
     {
         if ($this->users->removeElement($user)) {
             $user->removeDegree($this);
+        }
+
+        return $this;
+    }
+
+    public function getSchool(): ?string
+    {
+        return $this->school;
+    }
+
+    public function setSchool(string $school): self
+    {
+        $this->school = $school;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Course>
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function addCourse(Course $course): self
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses->add($course);
+            $course->setDegree($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Course $course): self
+    {
+        if ($this->courses->removeElement($course)) {
+            // set the owning side to null (unless already changed)
+            if ($course->getDegree() === $this) {
+                $course->setDegree(null);
+            }
         }
 
         return $this;
