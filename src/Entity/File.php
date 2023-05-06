@@ -27,8 +27,8 @@ class File
     #[ORM\JoinColumn(nullable: false)]
     private ?Subject $subject = null;
 
-    #[ORM\Column(type: 'string', enumType: CategoryEnum::class)]
-    private ?CategoryEnum $category = null;
+    #[ORM\Column(length: 255)]
+    private ?string $category = null;
 
     public function getId(): ?int
     {
@@ -83,17 +83,16 @@ class File
         return $this;
     }
 
-    public function getCategory(): ?CategoryEnum
+    public function getCategory(): ?string
     {
         return $this->category;
     }
 
-    public function setCategory(CategoryEnum $category): self
+    public function setCategory(string $category): self
     {
         $this->category = $category;
 
         return $this;
     }
-
 
 }
