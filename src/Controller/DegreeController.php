@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Repository\DegreeRepository;
+use App\Repository\UniversityRepository;
+use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,4 +62,50 @@ class DegreeController extends AbstractController
         ]);
 
     }
+
+    #[Route('/api/degrees/favorite', name: 'set_favorite_degree', methods: ['POST'])]
+    public function favoriteDegree(ManagerRegistry $doctrine, DegreeRepository $degreeRepository, UserRepository $userRepository, Request $request)
+    {
+        $decoded = json_decode($request->getContent());
+        $degreeId = $decoded->degree_id ?? null;
+        $userSub = $decoded->user_sub ?? null;
+
+        if (!$degreeId || !$userSub) {
+            return new Response(json_encode(['message' => 'Missing parameters']), 412, ['Content-Type' => 'application/json']);
+        }
+
+        $degree = $degreeRepository->find($degreeId);
+        $user = $userRepository->findOneBy(['sub' => $userSub]);
+
+        if(!$degree || !$user) {
+            return new Response(json_encode(['message' => 'Not Found']), 404, ['Content-Type' => 'application/json']);
+        }
+
+        $userDegree = $user->getDegrees()->filter(function($degree) use ($degreeId) {
+            return $degree->getId() === $degreeId;
+        });
+
+        if($userDegree->count() > 0) {
+            $user->removeDegree($degree);
+            $degree->removeUser($user);
+            $favorite = false;
+        } else {
+            $user->addDegree($degree);
+            $degree->addUser($user);
+            $favorite = true;
+        }
+
+        try {
+            $em = $doctrine->getManager();
+            $em->persist($user);
+            $em->persist($degree);
+            $em->flush();
+        } catch (\Exception $e) {
+            return new Response(json_encode(['favorite' => true]), 500, ['Content-Type' => 'application/json']);
+        }
+
+        return new Response(json_encode(['favorite' => $favorite]), 200, ['Content-Type' => 'application/json']);
+
+    }
+
 }

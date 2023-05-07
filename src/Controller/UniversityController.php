@@ -94,7 +94,7 @@ class UniversityController extends AbstractController
             $em->persist($university);
             $em->flush();
         } catch (\Exception $e) {
-            return new Response(json_encode(['message' => 'Already favorite']), 500, ['Content-Type' => 'application/json']);
+            return new Response(json_encode(['favorite' => true]), 500, ['Content-Type' => 'application/json']);
         }
 
         return new Response(json_encode(['favorite' => $favorite]), 200, ['Content-Type' => 'application/json']);
