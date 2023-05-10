@@ -30,6 +30,15 @@ class File
     #[ORM\Column(length: 255)]
     private ?string $category = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $extra = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $url = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $uniqueName = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +100,42 @@ class File
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getExtra(): ?string
+    {
+        return $this->extra;
+    }
+
+    public function setExtra(string $extra): self
+    {
+        $this->extra = $extra;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getUniqueName(): ?string
+    {
+        return $this->uniqueName;
+    }
+
+    public function setUniqueName(string $uniqueName): self
+    {
+        $this->uniqueName = $uniqueName;
 
         return $this;
     }
