@@ -3,29 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\File;
+use App\Repository\FileRepository;
 use App\Repository\SubjectRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FileController extends AbstractController
 {
-    #[Route('/file', name: 'app_file')]
-    public function index(): Response
-    {
-        return $this->render('file/index.html.twig', [
-            'controller_name' => 'FileController',
-        ]);
-    }
-
 
     #[Route('/api/files/upload', name: 'upload_files', methods: ['POST'])]
-    public function uploadFile(ManagerRegistry $doctrine, SubjectRepository $subjectRepository, UserRepository $userRepository, Request $request, SluggerInterface $slugger)
+    public function uploadFile(ManagerRegistry $doctrine, SubjectRepository $subjectRepository, UserRepository $userRepository, Request $request)
     {
         $fileName = $request->request->get('fileName');
         $uniqueName = $request->request->get('uniqueName');
@@ -65,4 +57,92 @@ class FileController extends AbstractController
         return new Response(json_encode(['message' => ['Uploaded']]), 200, ['Content-Type' => 'application/json']);
 
     }
+
+    #[Route('/api/files/user/{sub}', name: 'index_user_files', methods: ['GET'])]
+    public function indexUserFiles(FileRepository $fileRepository, SerializerInterface $serializer, $sub)
+    {
+        $files = $fileRepository->createQueryBuilder('f')
+            ->join('f.user', 'u')
+            ->where('u.sub = :sub')
+            ->setParameter('sub', $sub)
+            ->getQuery()
+            ->getResult();
+
+        $response = $serializer->serialize($files, 'json');
+
+        return new Response($response, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+    }
+
+    #[Route('/api/files/university/{id}', name: 'index_university_files', methods: ['GET'])]
+    public function indexUniversityFiles(FileRepository $fileRepository, SerializerInterface $serializer, $id)
+    {
+        try {
+            $files = $fileRepository->createQueryBuilder('f')
+                ->join('f.subject', 's')
+                ->join('s.degrees', 'd')
+                ->join('d.university', 'u')
+                ->where('u.id = :id')
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getResult();
+        } catch (\Exception $e) {
+            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
+        }
+
+        $response = $serializer->serialize($files, 'json');
+
+        return new Response($response, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+
+    }
+
+    #[Route('/api/files/degree/{id}', name: 'index_degree_files', methods: ['GET'])]
+    public function indexDegreeFiles(FileRepository $fileRepository, SerializerInterface $serializer, $id)
+    {
+        try {
+            $files = $fileRepository->createQueryBuilder('f')
+                ->join('f.subject', 's')
+                ->join('s.degrees', 'd')
+                ->where('d.id = :id')
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getResult();
+        } catch (\Exception $e) {
+            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
+        }
+
+        $response = $serializer->serialize($files, 'json');
+
+        return new Response($response, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+
+    }
+
+    #[Route('/api/files/subject/{id}', name: 'index_subject_files', methods: ['GET'])]
+    public function indexSubjectFiles(FileRepository $fileRepository, SerializerInterface $serializer, $id)
+    {
+        try {
+            $files = $fileRepository->createQueryBuilder('f')
+                ->join('f.subject', 's')
+                ->where('s.id = :id')
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getResult();
+        } catch (\Exception $e) {
+            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
+        }
+
+        $response = $serializer->serialize($files, 'json');
+
+        return new Response($response, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+
+    }
+
+
 }
