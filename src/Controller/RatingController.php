@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Rating;
+use App\Repository\FileRepository;
+use App\Repository\RatingRepository;
+use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use JMS\Serializer\SerializerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class RatingController extends AbstractController
+{
+    #[Route('/api/ratings', name: 'post_rating', methods: ['POST'])]
+    public function saveRating(ManagerRegistry $doctrine, FileRepository $fileRepository, RatingRepository $ratingRepository, UserRepository $userRepository, Request $request, SerializerInterface $serializer): Response
+    {
+        $em = $doctrine->getManager();
+        $decoded = json_decode($request->getContent());
+        $fileId = $decoded->file_id ?? null;
+        $userSub = $decoded->user_sub ?? null;
+        $value = $decoded->value ?? null;
+
+        if (!$fileId || !$userSub) {
+            return new Response(json_encode(['message' => 'Bad Request']), 412, ['Content-Type' => 'application/json']);
+        }
+
+        $file = $fileRepository->find($fileId);
+        $user = $userRepository->findOneBy(['sub' => $userSub]);
+
+        if (!$file || !$user) {
+            return new Response(json_encode(['message' => 'Not Found']), 404, ['Content-Type' => 'application/json']);
+        }
+
+        $rating = $ratingRepository->createQueryBuilder('r')
+            ->join('r.file', 'f')
+            ->join('r.user', 'u')
+            ->where('f.id = :fileId')
+            ->andWhere('u.sub = :userSub')
+            ->setParameter('fileId', $fileId)
+            ->setParameter('userSub', $userSub)
+            ->getQuery()
+            ->getResult();
+
+        if (!$rating) {
+            $rating = new Rating();
+            $rating->setFile($file);
+            $rating->setUser($user);
+            $rating->setValue($value);
+            $user->getRatings()->add($rating);
+            $file->getRatings()->add($rating);
+            $em->persist($rating);
+            $em->persist($user);
+            $em->persist($file);
+            $em->flush();
+        } else {
+            $rating[0]->setValue($value);
+            $em->persist($rating[0]);
+            $em->flush();
+        }
+
+        $file = $fileRepository->createQueryBuilder('f')
+            ->join('f.user', 'u')
+            ->leftJoin('f.ratings', 'r')
+            ->where('f.id = :id')
+            ->setParameter('id', $fileId)
+            ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'u.sub as user', 'AVG(r.value) as rating')
+            ->getQuery()
+            ->getSingleResult();
+
+        $response = $serializer->serialize($file, 'json');
+
+        return new Response($response, 200, ['Content-Type' => 'application/json']);
+
+    }
+}

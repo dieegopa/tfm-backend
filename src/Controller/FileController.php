@@ -65,6 +65,7 @@ class FileController extends AbstractController
             ->join('f.user', 'u')
             ->where('u.sub = :sub')
             ->setParameter('sub', $sub)
+            ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'u.email as user')
             ->getQuery()
             ->getResult();
 
@@ -83,8 +84,10 @@ class FileController extends AbstractController
                 ->join('f.subject', 's')
                 ->join('s.degrees', 'd')
                 ->join('d.university', 'u')
+                ->join('f.user', 'us')
                 ->where('u.id = :id')
                 ->setParameter('id', $id)
+                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
                 ->getQuery()
                 ->getResult();
         } catch (\Exception $e) {
@@ -106,8 +109,10 @@ class FileController extends AbstractController
             $files = $fileRepository->createQueryBuilder('f')
                 ->join('f.subject', 's')
                 ->join('s.degrees', 'd')
+                ->join('f.user', 'us')
                 ->where('d.id = :id')
                 ->setParameter('id', $id)
+                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
                 ->getQuery()
                 ->getResult();
         } catch (\Exception $e) {
@@ -128,8 +133,10 @@ class FileController extends AbstractController
         try {
             $files = $fileRepository->createQueryBuilder('f')
                 ->join('f.subject', 's')
+                ->join('f.user', 'us')
                 ->where('s.id = :id')
                 ->setParameter('id', $id)
+                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
                 ->getQuery()
                 ->getResult();
         } catch (\Exception $e) {
@@ -144,5 +151,50 @@ class FileController extends AbstractController
 
     }
 
+    #[Route('/api/files/{id}', name: 'index_file', methods: ['GET'])]
+    public function indexFile(FileRepository $fileRepository, SerializerInterface $serializer, $id)
+    {
+        try {
+            $file = $fileRepository->createQueryBuilder('f')
+                ->join('f.user', 'u')
+                ->leftJoin('f.ratings', 'r')
+                ->where('f.id = :id')
+                ->setParameter('id', $id)
+                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'u.sub as user', 'AVG(r.value) as rating')
+                ->getQuery()
+                ->getSingleResult();
+        } catch (\Exception $e) {
+            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
+        }
+
+        $response = $serializer->serialize($file, 'json');
+
+        return new Response($response, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+
+    }
+
+
+    #[Route('/api/files', name: 'index_files', methods: ['GET'])]
+    public function indexFiles(FileRepository $fileRepository, SerializerInterface $serializer)
+    {
+
+        $files = $fileRepository->createQueryBuilder('f')
+            ->join('f.subject', 's')
+            ->join('f.user', 'u')
+            ->leftJoin('f.ratings', 'r')
+            ->select('f.id, f.name, f.category, f.type, f.extra, f.url, s.name as subject, u.email as user, COALESCE(AVG(r.value), 0) as rating')
+            ->groupBy('f.id')
+            ->getQuery()
+            ->getResult();
+
+        $response = $serializer->serialize($files, 'json');
+
+        return new Response($response, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+
+    }
 
 }

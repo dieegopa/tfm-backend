@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Index(columns: ['sub'], name: 'user_sub_idx')]
 class User implements UserInterface
 {
     #[ORM\Id]
@@ -37,12 +38,16 @@ class User implements UserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: File::class)]
     private Collection $files;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Rating::class)]
+    private Collection $ratings;
+
     public function __construct()
     {
         $this->universities = new ArrayCollection();
         $this->subjects = new ArrayCollection();
         $this->degrees = new ArrayCollection();
         $this->files = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,6 +213,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($file->getUser() === $this) {
                 $file->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getUser() === $this) {
+                $rating->setUser(null);
             }
         }
 
