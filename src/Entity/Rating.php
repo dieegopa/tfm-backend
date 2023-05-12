@@ -64,4 +64,9 @@ class Rating
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return strval($this->getValue());
+    }
 }
