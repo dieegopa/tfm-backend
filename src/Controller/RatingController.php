@@ -76,4 +76,33 @@ class RatingController extends AbstractController
         return new Response($response, 200, ['Content-Type' => 'application/json']);
 
     }
+
+    #[Route('/api/ratings/{fileId}/{userSub}', name: 'index_file_rating', methods: ['GET'])]
+    public function indexFileRating(RatingRepository $ratingRepository, SerializerInterface $serializer, $fileId, $userSub)
+    {
+
+        try {
+            $rating = $ratingRepository->createQueryBuilder('r')
+                ->join('r.file', 'f')
+                ->join('r.user', 'u')
+                ->where('f.id = :fileId')
+                ->andWhere('u.sub = :userSub')
+                ->setParameter('fileId', $fileId)
+                ->setParameter('userSub', $userSub)
+                ->select('r.value as rating')
+                ->getQuery()
+                ->getSingleResult();
+        } catch (\Exception $e) {
+            return new Response(json_encode(['rating' => 0]), 200, ['Content-Type' => 'application/json']);
+        }
+
+        if (!$rating) {
+            return new Response(json_encode(['rating' => 0]), 404, ['Content-Type' => 'application/json']);
+        } else {
+            $response = $serializer->serialize($rating, 'json');
+            return new Response($response, 200, ['Content-Type' => 'application/json']);
+        }
+
+    }
+
 }

@@ -160,7 +160,7 @@ class FileController extends AbstractController
                 ->leftJoin('f.ratings', 'r')
                 ->where('f.id = :id')
                 ->setParameter('id', $id)
-                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'u.sub as user', 'AVG(r.value) as rating')
+                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'u.sub as user', 'COALESCE(AVG(r.value), 0) as rating')
                 ->getQuery()
                 ->getSingleResult();
         } catch (\Exception $e) {

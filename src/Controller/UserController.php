@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,4 +27,23 @@ class UserController extends AbstractController
             'Content-Type' => 'application/json'
         ]);
     }
+
+    #[Route('/api/users/{sub}', name: 'delete_user', methods: ['DELETE'])]
+    public function deleteUser(ManagerRegistry $doctrine, UserRepository $userRepository, SerializerInterface $serializer, Request $request, $sub)
+    {
+
+        $user = $userRepository->findOneBy(['sub' => $sub]);
+
+        if (!$user) {
+            return new Response(json_encode(['message' => 'Not Found']), 404, ['Content-Type' => 'application/json']);
+        }
+
+        $em = $doctrine->getManager();
+        $em->remove($user);
+        $em->flush();
+
+        return new Response(json_encode(['message' => 'Deleted']), 200, ['Content-Type' => 'application/json']);
+
+    }
+
 }
