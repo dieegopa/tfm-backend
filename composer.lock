@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d77b29dbbfbaa45e7e2f339d8497f7c1",
+    "content-hash": "b9e83a4acb8a3dae0e4bff42143fe191",
     "packages": [
         {
             "name": "danieleambrosino/firebase-authentication-bundle",
@@ -8853,7 +8853,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
