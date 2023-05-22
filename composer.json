@@ -8,7 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "danieleambrosino/firebase-authentication-bundle": "dev-main",
-        "doctrine/doctrine-bundle": "^2.9",
+        "doctrine/doctrine-bundle": "^2.8",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "easycorp/easyadmin-bundle": "^4.6",
