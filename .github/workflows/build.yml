@@ -1,25 +1,21 @@
+name: CI
 on:
-  # Trigger analysis when pushing in master or pull requests, and when creating
-  # a pull request.
   push:
-    branches:
-      - master
-  pull_request:
-    types: [opened, synchronize, reopened]
-name: Main Workflow
+    branches: ['master']
 jobs:
-  sonarcloud:
-    runs-on: ubuntu-latest
+  ci:
+    name: Test - Unit & Integration
+    runs-on: ubuntu-latest # macos-latest macos-11 windows-2019 ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-        with:
-          projectBaseDir: my-custom-directory
-          args: >
-            -Dsonar.organization=dieegopa
-            -Dsonar.projectKey=dieegopa_tfm-backend
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
+        with: {fetch-depth: 0}
+      - name: Sonar
+        if: success()
+        run: >
+          -Dsonar.projectKey=dieegopa_tfm-backend
+          -Dsonar.organization=dieegopa
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=$SONAR_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
