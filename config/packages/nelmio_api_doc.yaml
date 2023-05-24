@@ -1,0 +1,805 @@
+nelmio_api_doc:
+  documentation:
+    info:
+      title: Notekeeper API
+      description: API for Notekeeper
+      version: 1.0.0
+    paths:
+      /free/courses/{degree}:
+        get:
+          tags:
+            - Courses
+          summary: Get free courses
+          parameters:
+            - name: 'degree'
+              in: 'path'
+              description: 'Degree Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Course'
+            404:
+              description: Not found
+      /free/degrees:
+        get:
+          tags:
+            - Degrees
+          summary: Get free degrees
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Degree'
+            404:
+              description: Not found
+      /free/degrees/{university}/{slug}:
+        get:
+          tags:
+            - Degrees
+          summary: Get free degrees of university
+          parameters:
+            - name: 'university'
+              in: 'path'
+              description: 'University slug'
+              required: true
+              schema:
+                type: string
+            - name: 'slug'
+              in: 'path'
+              description: 'Degree slug'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Degree'
+            404:
+              description: Not found
+      /api/degrees/favorite:
+        post:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Degrees
+          summary: Add degree to favorites
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    degree_id:
+                      type: integer
+                      format: int64
+                    user_sub:
+                      type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      favorite:
+                        type: boolean
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+            500:
+              description: Already favorite
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      favorite:
+                        type: boolean
+      /api/files/upload:
+        post:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Upload file
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  type: object
+                  properties:
+                    fileName:
+                      type: string
+                    uniqueName:
+                      type: string
+                    fileCategory:
+                      type: string
+                    fileExtra:
+                      type: string
+                    fileType:
+                      type: string
+                    subjectId:
+                      type: integer
+                      format: int64
+                    userSub:
+                      type: string
+                    fileUrl:
+                      type: string
+          responses:
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+      /api/files/user/{sub}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Get files of user
+          parameters:
+            - name: 'sub'
+              in: 'path'
+              description: 'User sub'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+      /api/files/university/{id}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Get files of university
+          parameters:
+            - name: 'id'
+              in: 'path'
+              description: 'University Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /api/files/degree/{id}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Get files of degree
+          parameters:
+            - name: 'id'
+              in: 'path'
+              description: 'Degree Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /api/files/subject/{id}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Get files of subject
+          parameters:
+            - name: 'id'
+              in: 'path'
+              description: 'Subject Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /api/files/{id}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Get file
+          parameters:
+            - name: 'id'
+              in: 'path'
+              description: 'File Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /api/files:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Get all files
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /api/ratings:
+        post:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Ratings
+          summary: Add rating
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    file_id:
+                      type: integer
+                      format: int64
+                    user_sub:
+                      type: string
+                    value:
+                      type: integer
+                      format: int64
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /api/ratings/{fileId}/{userSub}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Ratings
+          summary: Get rating
+          parameters:
+            - name: 'fileId'
+              in: 'path'
+              description: 'File Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+            - name: 'userSub'
+              in: 'path'
+              description: 'User sub'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Rating'
+            404:
+              description: Not found
+      /api/register:
+        post:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - User
+          summary: Register user
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                    sub:
+                      type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/User'
+            404:
+              description: Not found
+      /free/subjects/{subject}:
+        get:
+          tags:
+            - Subjects
+          summary: Get subjects by name
+          parameters:
+            - name: 'subject'
+              in: 'path'
+              description: 'Subject slug'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Subject'
+            404:
+              description: Not found
+      /api/subjects/favorite:
+        post:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Subjects
+          summary: Add subject to favorites
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    subject_id:
+                      type: integer
+                      format: int64
+                    user_sub:
+                      type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      favorite:
+                        type: boolean
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /free/universities:
+        get:
+          tags:
+            - Universities
+          summary: Get all universities
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/University'
+            404:
+              description: Not found
+      /free/universities/{slug}:
+        get:
+          tags:
+            - Universities
+          summary: Get university by slug
+          parameters:
+            - name: 'slug'
+              in: 'path'
+              description: 'University slug'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/University'
+            404:
+              description: Not found
+      /api/universities/favorite:
+        post:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Universities
+          summary: Add university to favorites
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    university_id:
+                      type: integer
+                      format: int64
+                    user_sub:
+                      type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      favorite:
+                        type: boolean
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+      /api/universities/favorite/{universityId}/{userSub}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Universities
+          summary: Get university favorite
+          parameters:
+            - name: 'universityId'
+              in: 'path'
+              description: 'University Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+            - name: 'userSub'
+              in: 'path'
+              description: 'User sub'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      favorite:
+                        type: boolean
+            404:
+              description: Not found
+      /api/users/{sub}:
+        get:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - User
+          summary: Get user by sub
+          parameters:
+            - name: 'sub'
+              in: 'path'
+              description: 'User sub'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/User'
+            404:
+              description: Not found
+        delete:
+          tags:
+            - User
+          summary: Delete user by sub
+          parameters:
+            - name: 'sub'
+              in: 'path'
+              description: 'User sub'
+              required: true
+              schema:
+                type: string
+          responses:
+            200:
+              description: Ok
+            404:
+              description: Not found
+
+    tags:
+      - name: Courses
+        description: Courses management
+      - name: Degrees
+        description: Degrees management
+      - name: Files
+        description: Files management
+      - name: Ratings
+        description: Ratings management
+      - name: Subjects
+        description: Subjects management
+      - name: User
+        description: User management
+      - name: Universities
+        description: Universities management
+    components:
+      schemas:
+        User:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            sub:
+              type: string
+            roles:
+              type: array
+              items:
+                type: string
+            email:
+              type: string
+            universities:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/University'
+            subjects:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Subject'
+            degrees:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Degree'
+            files:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/File'
+            ratings:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Rating'
+        University:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+            image_url:
+              type: string
+            slug:
+              type: string
+            degrees:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Degree'
+            users:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/User'
+        Subject:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+            slug:
+              type: string
+            degrees:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Degree'
+            users:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/User'
+            course:
+              type: object
+              schema: '#/components/schemas/Course'
+            files:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/File'
+        Staff:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            email:
+              type: string
+            roles:
+              type: array
+              items:
+                type: string
+            password:
+              type: string
+        Rating:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            value:
+              type: integer
+              format: int64
+            file:
+              type: object
+              schema: '#/components/schemas/File'
+            user:
+              type: object
+              schema: '#/components/schemas/User'
+        File:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+            type:
+              type: string
+            user:
+              type: object
+              schema: '#/components/schemas/User'
+            subject:
+              type: object
+              schema: '#/components/schemas/Subject'
+            category:
+              type: string
+            extra:
+              type: string
+            url:
+              type: string
+            unique_name:
+              type: string
+            ratings:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Rating'
+        Degree:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+            slug:
+              type: string
+            university:
+              type: object
+              schema: '#/components/schemas/University'
+            subject:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Subject'
+            users:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/User'
+            school:
+              type: string
+            courses:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Course'
+        Course:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+            slug:
+              type: string
+            degree:
+              type: object
+              schema: '#/components/schemas/Degree'
+            subjects:
+              type: array
+              items:
+                type: object
+                schema: '#/components/schemas/Subject'
+            number:
+              type: integer
+              format: int64
+      securitySchemes:
+        bearerAuth:
+          type: http
+          scheme: bearer
+          bearerFormat: JWT
+
+  areas: # to filter documented areas
+    path_patterns:
+      - ^/doc(?!(/doc|/doc.json)$) # Accepts routes under /api except /api/doc
