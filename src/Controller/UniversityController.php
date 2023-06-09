@@ -122,5 +122,18 @@ class UniversityController extends AbstractController
 
     }
 
+    #[Route('/universities', name: 'options_universities', methods: ['OPTIONS'])]
+    public function optionsUniversities(): Response
+    {
+        $response = new Response(null, 200, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
 
 }

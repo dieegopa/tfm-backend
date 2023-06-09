@@ -105,4 +105,17 @@ class RatingController extends AbstractController
 
     }
 
+    #[Route('/ratings', name: 'options_ratings', methods: ['OPTIONS'])]
+    public function optionsRatings(): Response
+    {
+        $response = new Response(null, 200, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
 }

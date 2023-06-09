@@ -108,4 +108,17 @@ class DegreeController extends AbstractController
 
     }
 
+    #[Route('/degrees', name: 'options_degrees', methods: ['OPTIONS'])]
+    public function optionsDegrees(): Response
+    {
+        $response =  new Response(null, 200, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
 }

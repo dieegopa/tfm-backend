@@ -640,7 +640,62 @@ nelmio_api_doc:
               description: Ok
             404:
               description: Not found
-
+      /courses:
+        options:
+          tags:
+            - Courses
+          summary: Get options for courses
+          responses:
+            200:
+              description: Ok
+      /degrees:
+        options:
+          tags:
+            - Degrees
+          summary: Get options for degrees
+          responses:
+            200:
+              description: Ok
+      /files:
+        options:
+          tags:
+            - Files
+          summary: Get options for files
+          responses:
+            200:
+              description: Ok
+      /ratings:
+        options:
+          tags:
+            - Ratings
+          summary: Get options for ratings
+          responses:
+            200:
+              description: Ok
+      /subjects:
+        options:
+          tags:
+            - Subjects
+          summary: Get options for subjects
+          responses:
+            200:
+              description: Ok
+      /universities:
+        options:
+          tags:
+            - Universities
+          summary: Get options for universities
+          responses:
+            200:
+              description: Ok
+      /users:
+        options:
+          tags:
+            - User
+          summary: Get options for users
+          responses:
+            200:
+              description: Ok
     tags:
       - name: Courses
         description: Courses management

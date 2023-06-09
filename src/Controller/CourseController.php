@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CourseController extends AbstractController
 {
     #[Route('/free/courses/{degree}', name: 'course', methods: ['GET'])]
-    public function indexDegree(CourseRepository $courseRepository, SerializerInterface $serializer, $degree): Response
+    public function indexCourseDegrees(CourseRepository $courseRepository, SerializerInterface $serializer, $degree): Response
     {
 
         $courses = $courseRepository->createQueryBuilder('c')
@@ -31,5 +31,17 @@ class CourseController extends AbstractController
             'Content-Type' => 'application/json'
         ]);
 
+    }
+
+    #[Route('/courses', name: 'options_courses', methods: ['OPTIONS'])]
+    public function optionsCourses(): Response
+    {
+        $response =  new Response(null, 200, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type',
+        ]);
+
+        return $response->send();
     }
 }

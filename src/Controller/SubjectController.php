@@ -75,4 +75,17 @@ class SubjectController extends AbstractController
         return new Response(json_encode(['favorite' => $favorite]), 200, ['Content-Type' => 'application/json']);
 
     }
+
+    #[Route('/subjects', name: 'options_subjects', methods: ['OPTIONS'])]
+    public function optionsSubjects(): Response
+    {
+        $response =  new Response(null, 200, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
 }
