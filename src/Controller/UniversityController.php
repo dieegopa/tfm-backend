@@ -56,7 +56,7 @@ class UniversityController extends AbstractController
 
     }
 
-    #[Route('/api/universities/favorite', name: 'set_favorite_university', methods: ['POST'])]
+    #[Route('/api/universities/favorite', name: 'set_favorite_university', methods: ['PATCH'])]
     public function favoriteUniversity(ManagerRegistry $doctrine, UniversityRepository $universityRepository, UserRepository $userRepository, Request $request)
     {
         $decoded = json_decode($request->getContent());

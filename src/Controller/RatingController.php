@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RatingController extends AbstractController
 {
-    #[Route('/api/ratings', name: 'post_rating', methods: ['POST'])]
+    #[Route('/api/ratings', name: 'post_rating', methods: ['PATCH'])]
     public function saveRating(ManagerRegistry $doctrine, FileRepository $fileRepository, RatingRepository $ratingRepository, UserRepository $userRepository, Request $request, SerializerInterface $serializer): Response
     {
         $em = $doctrine->getManager();

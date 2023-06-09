@@ -197,4 +197,51 @@ class FileController extends AbstractController
 
     }
 
+    #[Route('/api/files/{id}', name: 'delete_files', methods: ['DELETE'])]
+    public function deleteFile(ManagerRegistry $doctrine, FileRepository $fileRepository, SerializerInterface $serializer, $id)
+    {
+        $file = $fileRepository->find($id);
+
+        if (!$file) {
+            return new Response(json_encode(['message' => 'File not found']), 404, ['Content-Type' => 'application/json']);
+        }
+
+        $em = $doctrine->getManager();
+        $em->remove($file);
+        $em->flush();
+
+        return new Response(json_encode(['message' => 'File deleted']), 200, ['Content-Type' => 'application/json']);
+
+    }
+
+    #[Route('/api/files/{id}', name: 'update_file', methods: ['PUT'])]
+    public function updateFile(ManagerRegistry $doctrine, FileRepository $fileRepository, Request $request, $id)
+    {
+        $data = json_decode($request->getContent(), true);
+        $fileName = $data['fileName'];
+        $fileCategory = $data['category'];
+        $fileExtra = $data['fileExtra'];
+
+        $file = $fileRepository->find($id);
+
+        if (!$file) {
+            return new Response(json_encode(['message' => 'File not found']), 404, ['Content-Type' => 'application/json']);
+        }
+
+        $em = $doctrine->getManager();
+
+        try {
+            $file->setName($fileName);
+            $file->setCategory($fileCategory);
+            $file->setExtra($fileExtra);
+            $em->persist($file);
+            $em->flush();
+        } catch (\Exception $e) {
+            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
+        }
+
+        return new Response(json_encode(['message' => ['Uploaded']]), 200, ['Content-Type' => 'application/json']);
+
+    }
+
 }

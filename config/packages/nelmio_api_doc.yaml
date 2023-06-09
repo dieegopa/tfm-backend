@@ -69,7 +69,7 @@ nelmio_api_doc:
             404:
               description: Not found
       /api/degrees/favorite:
-        post:
+        patch:
           security:
             - bearerAuth: [ ]
           tags:
@@ -280,6 +280,68 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        delete:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Delete file
+          parameters:
+            - name: 'id'
+              in: 'path'
+              description: 'File Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
+        put:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Files
+          summary: Update file
+          parameters:
+            - name: 'id'
+              in: 'path'
+              description: 'File Id'
+              required: true
+              schema:
+                type: integer
+                format: int64
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    fileName:
+                      type: string
+                    category:
+                      type: string
+                    fileExtra:
+                      type: string
+          responses:
+            200:
+              description: Ok
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/File'
+            404:
+              description: Not found
+            412:
+              description: Precondition failed
       /api/files:
         get:
           security:
@@ -299,7 +361,7 @@ nelmio_api_doc:
             412:
               description: Precondition failed
       /api/ratings:
-        post:
+        patch:
           security:
             - bearerAuth: [ ]
           tags:
@@ -408,7 +470,7 @@ nelmio_api_doc:
             404:
               description: Not found
       /api/subjects/favorite:
-        post:
+        patch:
           security:
             - bearerAuth: [ ]
           tags:
@@ -475,7 +537,7 @@ nelmio_api_doc:
             404:
               description: Not found
       /api/universities/favorite:
-        post:
+        patch:
           security:
             - bearerAuth: [ ]
           tags:

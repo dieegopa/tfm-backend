@@ -31,7 +31,7 @@ class SubjectController extends AbstractController
 
     }
 
-    #[Route('/api/subjects/favorite', name: 'set_favorite_subject', methods: ['POST'])]
+    #[Route('/api/subjects/favorite', name: 'set_favorite_subject', methods: ['PATCH'])]
     public function favoriteSubject(ManagerRegistry $doctrine, SubjectRepository $subjectRepository, UserRepository $userRepository, Request $request)
     {
         $decoded = json_decode($request->getContent());

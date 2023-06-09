@@ -63,7 +63,7 @@ class DegreeController extends AbstractController
 
     }
 
-    #[Route('/api/degrees/favorite', name: 'set_favorite_degree', methods: ['POST'])]
+    #[Route('/api/degrees/favorite', name: 'set_favorite_degree', methods: ['PATCH'])]
     public function favoriteDegree(ManagerRegistry $doctrine, DegreeRepository $degreeRepository, UserRepository $userRepository, Request $request)
     {
         $decoded = json_decode($request->getContent());
