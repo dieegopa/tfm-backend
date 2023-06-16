@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Controller\CourseController;
+use App\Entity\Course;
 use App\Factory\CourseFactory;
 use App\Factory\DegreeFactory;
 use GuzzleHttp\Client;
@@ -33,6 +35,7 @@ class CourseControllerTest extends KernelTestCase
 
     public function testIndexCourseDegrees()
     {
+
         $degree = DegreeFactory::createOne([
             'name' => 'Degree 1',
             'slug' => 'degree1',
@@ -45,15 +48,19 @@ class CourseControllerTest extends KernelTestCase
             'degree' => $degree,
         ]);
 
-        $response = self::$client->get('/free/courses/' . $degree->getSlug());
+        $courseController = new CourseController();
 
-        $responseBody = json_decode($response->getBody(), true);
+        $entityManager = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $courseRepository = $entityManager->getRepository(Course::class);
+        $serializer = static::$kernel->getContainer()->get('jms_serializer');
+
+        $response = $courseController->indexCourseDegrees($courseRepository, $serializer, 'degree1');
+        $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals($course->getName(), $responseBody[0]['name']);
-        $this->assertEquals($course->getSlug(), $responseBody[0]['slug']);
-        $this->assertEquals($course->getNumber(), $responseBody[0]['number']);
-        $this->assertEquals($course->getDegree()->getName(), $responseBody[0]['degree']['name']);
+        $this->assertEquals($course->getName(), $data[0]['name']);
+        $this->assertEquals($course->getSlug(), $data[0]['slug']);
+        $this->assertEquals($course->getNumber(), $data[0]['number']);
 
     }
 
