@@ -88,14 +88,10 @@ class UniversityController extends AbstractController
             $favorite = true;
         }
 
-        try {
-            $em = $doctrine->getManager();
-            $em->persist($user);
-            $em->persist($university);
-            $em->flush();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['favorite' => true]), 500, ['Content-Type' => 'application/json']);
-        }
+        $em = $doctrine->getManager();
+        $em->persist($user);
+        $em->persist($university);
+        $em->flush();
 
         return new Response(json_encode(['favorite' => $favorite]), 200, ['Content-Type' => 'application/json']);
 
