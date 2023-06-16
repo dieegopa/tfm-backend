@@ -67,6 +67,7 @@ jobs:
       - name: Install PHPUnit
         run: simple-phpunit install
 
+
       - name: Run tests
         run: simple-phpunit --coverage-text
         env:
