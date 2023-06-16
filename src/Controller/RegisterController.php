@@ -31,9 +31,6 @@ class RegisterController extends AbstractController
             } catch (\Exception $e) {
                 $em = $doctrine->resetManager();
                 $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-                if(!$user){
-                    return new Response(json_encode(['message' => 'Not Found']), 404, ['Content-Type' => 'application/json']);
-                }
                 $user->setSub($sub);
                 $em->flush();
 
