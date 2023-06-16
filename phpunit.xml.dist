@@ -15,11 +15,6 @@
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
         <server name="SYMFONY_PHPUNIT_VERSION" value="9.5"/>
-        <env name="TEST_BASE_URL" value="http://localhost:8000"/>
-        <server name="DB_HOST" value="127.0.0.1:3306" />
-        <server name="DB_USER" value="root" />
-        <server name="DB_PASSWD" value="" />
-        <server name="DB_DBNAME" value="notekeeper_test" />
     </php>
 
     <testsuites>

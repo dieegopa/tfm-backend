@@ -5,16 +5,19 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [ opened, synchronize, reopened ]
 name: Main Workflow
 jobs:
   build-test:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: php-actions/composer@v6
-      - uses: php-actions/phpunit@v3
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: PHPUnit
+        uses: chindit/actions-phpunit-symfony@master
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
