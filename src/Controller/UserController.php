@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/api/users/{sub}', name: 'index_user', methods: ['GET'])]
-    public function indexUser(UserRepository $userRepository, SerializerInterface $serializer, Request $request, $sub)
+    public function indexUser(UserRepository $userRepository, SerializerInterface $serializer, $sub)
     {
         $user = $userRepository->findOneBy(['sub' => $sub]);
 
@@ -29,7 +29,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/users/{sub}', name: 'delete_user', methods: ['DELETE'])]
-    public function deleteUser(ManagerRegistry $doctrine, UserRepository $userRepository, SerializerInterface $serializer, Request $request, $sub)
+    public function deleteUser(ManagerRegistry $doctrine, UserRepository $userRepository, $sub)
     {
 
         $user = $userRepository->findOneBy(['sub' => $sub]);

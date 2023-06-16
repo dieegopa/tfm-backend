@@ -52,6 +52,7 @@ jobs:
             -Dsonar.organization=dieegopa
             -Dsonar.php.coverage.reportPaths=coverage.xml
             -Dsonar.exclusions=tests/**
+            -Dsonar.exclusions=tests/Controller/**
             -Dsonar.exclusions=src/Admin/**
             -Dsonar.exclusions=src/Factory/**
         env:
