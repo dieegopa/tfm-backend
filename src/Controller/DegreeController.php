@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\DegreeRepository;
-use App\Repository\UniversityRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerInterface;
@@ -53,15 +52,15 @@ class DegreeController extends AbstractController
         $degree = $degreeRepository->find($degreeId);
         $user = $userRepository->findOneBy(['sub' => $userSub]);
 
-        if(!$degree || !$user) {
+        if (!$degree || !$user) {
             return new Response(json_encode(['message' => 'Not Found']), 404, ['Content-Type' => 'application/json']);
         }
 
-        $userDegree = $user->getDegrees()->filter(function($degree) use ($degreeId) {
+        $userDegree = $user->getDegrees()->filter(function ($degree) use ($degreeId) {
             return $degree->getId() === $degreeId;
         });
 
-        if($userDegree->count() > 0) {
+        if ($userDegree->count() > 0) {
             $user->removeDegree($degree);
             $degree->removeUser($user);
             $favorite = false;
@@ -71,14 +70,10 @@ class DegreeController extends AbstractController
             $favorite = true;
         }
 
-        try {
-            $em = $doctrine->getManager();
-            $em->persist($user);
-            $em->persist($degree);
-            $em->flush();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['favorite' => true]), 500, ['Content-Type' => 'application/json']);
-        }
+        $em = $doctrine->getManager();
+        $em->persist($user);
+        $em->persist($degree);
+        $em->flush();
 
         return new Response(json_encode(['favorite' => $favorite]), 200, ['Content-Type' => 'application/json']);
 
@@ -87,7 +82,7 @@ class DegreeController extends AbstractController
     #[Route('free/degrees', name: 'options_degrees', methods: ['OPTIONS'])]
     public function optionsDegrees(): Response
     {
-        $response =  new Response(null, 204, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type',
@@ -100,7 +95,7 @@ class DegreeController extends AbstractController
     #[Route('/free/degrees/{university}/{slug}', name: 'options_degrees_university', methods: ['OPTIONS'])]
     public function optionsDegreesUniversity(): Response
     {
-        $response =  new Response(null, 204, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type',
@@ -113,7 +108,7 @@ class DegreeController extends AbstractController
     #[Route('/api/degrees/favorite', name: 'options_degrees_favorite', methods: ['OPTIONS'])]
     public function optionsDegreesFavorite(): Response
     {
-        $response =  new Response(null, 204, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'PATCH, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',

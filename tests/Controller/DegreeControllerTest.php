@@ -35,6 +35,13 @@ class DegreeControllerTest extends BaseTest
 
     }
 
+    public function testIndexDegreesNotFound()
+    {
+        $response = $this->degreeController->indexDegree($this->degreeRepository, $this->serializer, 'university1', 'degree1');
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
 
     public function testFavoriteDegree()
     {
@@ -69,6 +76,84 @@ class DegreeControllerTest extends BaseTest
 
     }
 
+    public function testFavoriteDegreeMissingParameters()
+    {
+
+        $request = Request::create(
+            '/api/degrees/favorite',
+            'PATCH',
+            [],
+            [],
+            [],
+            [],
+            json_encode([
+                'user_sub' => '',
+            ]),
+        );
+
+        $response = $this->degreeController->favoriteDegree($this->managerRegistry, $this->degreeRepository, $this->userRepository, $request);
+
+        $this->assertEquals(412, $response->getStatusCode());
+        $this->assertEquals('Missing parameters', json_decode($response->getContent(), true)['message']);
+
+    }
+
+    public function testFavoriteDegreeNotFound()
+    {
+
+            $request = Request::create(
+                '/api/degrees/favorite',
+                'PATCH',
+                [],
+                [],
+                [],
+                [],
+                json_encode([
+                    'user_sub' => 'test',
+                    'degree_id' => 1,
+                ]),
+            );
+
+            $response = $this->degreeController->favoriteDegree($this->managerRegistry, $this->degreeRepository, $this->userRepository, $request);
+
+            $this->assertEquals(404, $response->getStatusCode());
+            $this->assertEquals('Not Found', json_decode($response->getContent(), true)['message']);
+
+    }
+
+    public function testFavoriteUnfavoriteDegree()
+    {
+        $user = UserFactory::createOne([
+            'email' => 'test@test.com',
+            'sub' => 'test',
+        ]);
+
+        $degree = DegreeFactory::createOne([
+            'name' => 'Degree 1',
+            'slug' => 'degree1',
+        ]);
+
+        $request = Request::create(
+            '/api/degrees/favorite',
+            'PATCH',
+            [],
+            [],
+            [],
+            [],
+            json_encode([
+                'user_sub' => $user->getSub(),
+                'degree_id' => $degree->getId(),
+            ]),
+        );
+
+        $this->degreeController->favoriteDegree($this->managerRegistry, $this->degreeRepository, $this->userRepository, $request);
+
+        $response = $this->degreeController->favoriteDegree($this->managerRegistry, $this->degreeRepository, $this->userRepository, $request);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(false, json_decode($response->getContent(), true)['favorite']);
+    }
+
     public function testOptionsDegrees()
     {
         $response = $this->degreeController->optionsDegrees();
@@ -101,33 +186,4 @@ class DegreeControllerTest extends BaseTest
         $this->assertEquals('Content-Type, Authorization', $response->headers->get('Access-Control-Allow-Headers'));
 
     }
-
-//    public function testFavoriteDegree()
-//    {
-//
-//        $user = UserFactory::createOne([
-//            'email' => 'test@test.com',
-//            'sub' => 'test',
-//        ]);
-//
-//        $degree = DegreeFactory::createOne([
-//            'name' => 'Degree 1',
-//            'slug' => 'degree1',
-//        ]);
-//
-//        $response = self::$client->patch('/api/degrees/favorite', [
-//            'json' => [
-//                'user_sub' => $user->getSub(),
-//                'degree_id' => $degree->getId(),
-//            ]
-//        ]);
-//
-//        $responseBody = json_decode($response->getBody(), true);
-//
-//        $this->assertEquals(200, $response->getStatusCode());
-//        $this->assertEquals(true, $responseBody['favorite']);
-//
-//
-//    }
-
 }
