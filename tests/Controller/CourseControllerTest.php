@@ -15,26 +15,6 @@ class CourseControllerTest extends KernelTestCase
 {
     use ResetDatabase, Factories;
 
-    private static Client $client;
-
-    public static function setUpBeforeClass(): void
-    {
-
-        static::bootKernel();
-
-        $githubServerUrl = getenv('GITHUB_SERVER_URL');
-
-        self::$client = new Client([
-            'base_uri' => $githubServerUrl,
-            'defaults' => [
-                'exceptions' => false
-            ]
-        ]);
-
-        parent::setUpBeforeClass();
-
-    }
-
     public function testIndexCourseDegrees()
     {
 

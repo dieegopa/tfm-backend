@@ -14,30 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DegreeController extends AbstractController
 {
-    #[Route('/free/degrees', name: 'degrees', methods: ['GET'])]
-    public function index(DegreeRepository $degreeRepository, SerializerInterface $serializer, Request $request): Response
-    {
-        $query = $request->query->get('uni');
-        if (isset($query)) {
-            $degrees = $degreeRepository->createQueryBuilder('d')
-                ->join('d.university', 'u')
-                ->where('u.slug = :query')
-                ->setParameter('query', $query)
-                ->getQuery()
-                ->getResult();
-
-            $response = $serializer->serialize($degrees, 'json');
-            return new Response($response, 200, [
-                'Content-Type' => 'application/json'
-            ]);
-        }
-        $degrees = $degreeRepository->findAll();
-        $response = $serializer->serialize($degrees, 'json');
-
-        return new Response($response, 200, [
-            'Content-Type' => 'application/json'
-        ]);
-    }
 
     #[Route('/free/degrees/{university}/{slug}', name: 'degree', methods: ['GET'])]
     public function indexDegree(DegreeRepository $degreeRepository, SerializerInterface $serializer, $university, $slug): Response

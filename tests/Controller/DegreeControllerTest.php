@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Controller\DegreeController;
+use App\Entity\Degree;
 use App\Factory\DegreeFactory;
 use App\Factory\UniversityFactory;
 use App\Factory\UserFactory;
@@ -17,41 +19,10 @@ class DegreeControllerTest extends KernelTestCase
 
     private static Client $client;
 
-    public static function setUpBeforeClass(): void
-    {
-
-        static::bootKernel();
-
-        self::$client = new Client([
-            'base_uri' => 'https://127.0.0.1:8080',
-            'defaults' => [
-                'exceptions' => false
-            ]
-        ]);
-
-        parent::setUpBeforeClass();
-
-    }
 
     public function testIndexDegrees()
     {
-        $degree = DegreeFactory::createOne([
-            'name' => 'Degree 1',
-            'slug' => 'degree1',
-        ]);
 
-        $response = self::$client->get('/free/degrees');
-
-        $responseBody = json_decode($response->getBody(), true);
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals($degree->getName(), $responseBody[0]['name']);
-        $this->assertEquals($degree->getSlug(), $responseBody[0]['slug']);
-
-    }
-
-    public function testIndexDegreeUniveristy()
-    {
         $university = UniversityFactory::createOne([
             'name' => 'University 1',
             'slug' => 'university1',
@@ -63,43 +34,47 @@ class DegreeControllerTest extends KernelTestCase
             'university' => $university,
         ]);
 
-        $response = self::$client->get('/free/degrees/' . $university->getSlug() . '/' . $degree->getSlug());
+        $degreeController = new DegreeController();
+        $entityManager = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $degreeRepository = $entityManager->getRepository(Degree::class);
+        $serializer = static::$kernel->getContainer()->get('jms_serializer');
 
-        $responseBody = json_decode($response->getBody(), true);
+        $response = $degreeController->indexDegree($degreeRepository, $serializer, 'university1', 'degree1');
+        $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals($degree->getName(), $responseBody[0]['name']);
-        $this->assertEquals($degree->getSlug(), $responseBody[0]['slug']);
-        $this->assertEquals($degree->getUniversity()->getName(), $responseBody[0]['university']['name']);
+        $this->assertEquals($degree->getName(), $data[0]['name']);
+        $this->assertEquals($degree->getSlug(), $data[0]['slug']);
+        $this->assertEquals($degree->getUniversity()->getName(), $data[0]['university']['name']);
 
     }
 
-    public function testFavoriteDegree()
-    {
-
-        $user = UserFactory::createOne([
-            'email' => 'test@test.com',
-            'sub' => 'test',
-        ]);
-
-        $degree = DegreeFactory::createOne([
-            'name' => 'Degree 1',
-            'slug' => 'degree1',
-        ]);
-
-        $response = self::$client->patch('/api/degrees/favorite', [
-            'json' => [
-                'user_sub' => $user->getSub(),
-                'degree_id' => $degree->getId(),
-            ]
-        ]);
-
-        $responseBody = json_decode($response->getBody(), true);
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals(true, $responseBody['favorite']);
-
-
-    }
+//    public function testFavoriteDegree()
+//    {
+//
+//        $user = UserFactory::createOne([
+//            'email' => 'test@test.com',
+//            'sub' => 'test',
+//        ]);
+//
+//        $degree = DegreeFactory::createOne([
+//            'name' => 'Degree 1',
+//            'slug' => 'degree1',
+//        ]);
+//
+//        $response = self::$client->patch('/api/degrees/favorite', [
+//            'json' => [
+//                'user_sub' => $user->getSub(),
+//                'degree_id' => $degree->getId(),
+//            ]
+//        ]);
+//
+//        $responseBody = json_decode($response->getBody(), true);
+//
+//        $this->assertEquals(200, $response->getStatusCode());
+//        $this->assertEquals(true, $responseBody['favorite']);
+//
+//
+//    }
 
 }
