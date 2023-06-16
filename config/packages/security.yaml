@@ -24,6 +24,7 @@ security:
             stateless: true
             firebase: ~
             provider: app_user_provider
+            security: false
         free:
             pattern: ^/free
             stateless: true
