@@ -27,6 +27,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/Course'
             404:
               description: Not found
+        options:
+          tags:
+            - Courses
+          summary: Get options for free courses
+          responses:
+            204:
+              description: Ok, no content
       /free/degrees:
         get:
           tags:
@@ -41,6 +48,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/Degree'
             404:
               description: Not found
+        options:
+          tags:
+            - Degrees
+          summary: Get options for free degrees
+          responses:
+            204:
+              description: Ok, no content
       /free/degrees/{university}/{slug}:
         get:
           tags:
@@ -68,6 +82,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/Degree'
             404:
               description: Not found
+        options:
+          tags:
+            - Degrees
+          summary: Get options for free degrees of university
+          responses:
+            200:
+              description: Ok
       /api/degrees/favorite:
         patch:
           security:
@@ -109,6 +130,13 @@ nelmio_api_doc:
                     properties:
                       favorite:
                         type: boolean
+        options:
+          tags:
+            - Degrees
+          summary: Get options for favorite degrees
+          responses:
+            204:
+              description: Ok, no content
       /api/files/upload:
         post:
           security:
@@ -153,6 +181,13 @@ nelmio_api_doc:
                     properties:
                       message:
                         type: string
+        options:
+          tags:
+            - Files
+          summary: Get options for upload files
+          responses:
+            204:
+              description: Ok, no content
       /api/files/user/{sub}:
         get:
           security:
@@ -176,6 +211,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/File'
             404:
               description: Not found
+        options:
+          tags:
+            - Files
+          summary: Get options for user files
+          responses:
+            204:
+              description: Ok, no content
       /api/files/university/{id}:
         get:
           security:
@@ -202,6 +244,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Files
+          summary: Get options for university files
+          responses:
+            204:
+              description: Ok, no content
       /api/files/degree/{id}:
         get:
           security:
@@ -228,6 +277,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Files
+          summary: Get options for degree files
+          responses:
+            204:
+              description: Ok, no content
       /api/files/subject/{id}:
         get:
           security:
@@ -254,6 +310,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Files
+          summary: Get options for subject files
+          responses:
+            204:
+              description: Ok, no content
       /api/files/{id}:
         get:
           security:
@@ -342,6 +405,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Files
+          summary: Get options for file id
+          responses:
+            204:
+              description: Ok, no content
       /api/files:
         get:
           security:
@@ -360,6 +430,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Files
+          summary: Get options for all files
+          responses:
+            204:
+              description: Ok, no content
       /api/ratings:
         patch:
           security:
@@ -392,6 +469,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Ratings
+          summary: Get options for ratings
+          responses:
+            204:
+              description: Ok, no content
       /api/ratings/{fileId}/{userSub}:
         get:
           security:
@@ -422,6 +506,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/Rating'
             404:
               description: Not found
+        options:
+          tags:
+            - Ratings
+          summary: Get options for user file ratings
+          responses:
+            204:
+              description: Ok, no content
       /api/register:
         post:
           security:
@@ -447,7 +538,14 @@ nelmio_api_doc:
                   schema:
                     $ref: '#/components/schemas/User'
             404:
-              description: Not found
+              description: Not found/
+        options:
+          tags:
+            - User
+          summary: Get options for user register
+          responses:
+            204:
+              description: Ok, no content
       /free/subjects/{subject}:
         get:
           tags:
@@ -469,6 +567,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/Subject'
             404:
               description: Not found
+        options:
+          tags:
+            - Subjects
+          summary: Get options for free subjects
+          responses:
+            204:
+              description: Ok, no content
       /api/subjects/favorite:
         patch:
           security:
@@ -501,6 +606,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Subjects
+          summary: Get options for favorite subjects
+          responses:
+            204:
+              description: Ok, no content
       /free/universities:
         get:
           tags:
@@ -515,6 +627,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/University'
             404:
               description: Not found
+        options:
+          tags:
+            - Universities
+          summary: Get options for free universities
+          responses:
+            204:
+              description: Ok, no content
       /free/universities/{slug}:
         get:
           tags:
@@ -536,6 +655,13 @@ nelmio_api_doc:
                     $ref: '#/components/schemas/University'
             404:
               description: Not found
+        options:
+          tags:
+            - Universities
+          summary: Get options for free university
+          responses:
+            204:
+              description: Ok, no content
       /api/universities/favorite:
         patch:
           security:
@@ -568,6 +694,13 @@ nelmio_api_doc:
               description: Not found
             412:
               description: Precondition failed
+        options:
+          tags:
+            - Universities
+          summary: Get options for favorite university
+          responses:
+            204:
+              description: Ok, no content
       /api/universities/favorite/{universityId}/{userSub}:
         get:
           security:
@@ -601,6 +734,13 @@ nelmio_api_doc:
                         type: boolean
             404:
               description: Not found
+        options:
+          tags:
+            - Universities
+          summary: Get options for favorite user university
+          responses:
+            204:
+              description: Ok, no content
       /api/users/{sub}:
         get:
           security:
@@ -640,62 +780,13 @@ nelmio_api_doc:
               description: Ok
             404:
               description: Not found
-      /courses:
-        options:
-          tags:
-            - Courses
-          summary: Get options for courses
-          responses:
-            200:
-              description: Ok
-      /degrees:
-        options:
-          tags:
-            - Degrees
-          summary: Get options for degrees
-          responses:
-            200:
-              description: Ok
-      /files:
-        options:
-          tags:
-            - Files
-          summary: Get options for files
-          responses:
-            200:
-              description: Ok
-      /ratings:
-        options:
-          tags:
-            - Ratings
-          summary: Get options for ratings
-          responses:
-            200:
-              description: Ok
-      /subjects:
-        options:
-          tags:
-            - Subjects
-          summary: Get options for subjects
-          responses:
-            200:
-              description: Ok
-      /universities:
-        options:
-          tags:
-            - Universities
-          summary: Get options for universities
-          responses:
-            200:
-              description: Ok
-      /users:
         options:
           tags:
             - User
           summary: Get options for users
           responses:
-            200:
-              description: Ok
+            204:
+              description: Ok, no content
     tags:
       - name: Courses
         description: Courses management

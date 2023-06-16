@@ -108,12 +108,38 @@ class DegreeController extends AbstractController
 
     }
 
-    #[Route('/degrees', name: 'options_degrees', methods: ['OPTIONS'])]
+    #[Route('free/degrees', name: 'options_degrees', methods: ['OPTIONS'])]
     public function optionsDegrees(): Response
     {
-        $response =  new Response(null, 200, [
+        $response =  new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/free/degrees/{university}/{slug}', name: 'options_degrees_university', methods: ['OPTIONS'])]
+    public function optionsDegreesUniversity(): Response
+    {
+        $response =  new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/degrees/favorite', name: 'options_degrees_favorite', methods: ['OPTIONS'])]
+    public function optionsDegreesFavorite(): Response
+    {
+        $response =  new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'PATCH, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
         ]);
 

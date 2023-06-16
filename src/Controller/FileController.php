@@ -244,12 +244,90 @@ class FileController extends AbstractController
 
     }
 
-    #[Route('/files', name: 'options_files', methods: ['OPTIONS'])]
-    public function optionsFiles(): Response
+    #[Route('/api/files/upload', name: 'options_files_upload', methods: ['OPTIONS'])]
+    public function optionsFilesUpload(): Response
     {
-        $response = new Response(null, 200, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Methods' => 'POST, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/files/user/{sub}', name: 'options_files_user', methods: ['OPTIONS'])]
+    public function optionsFilesUser(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/files/university/{id}', name: 'options_files_uni', methods: ['OPTIONS'])]
+    public function optionsFilesUniversity(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/files/degree/{id}', name: 'options_files_degree', methods: ['OPTIONS'])]
+    public function optionsFilesDegree(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/files/subject/{id}', name: 'options_files_subject', methods: ['OPTIONS'])]
+    public function optionsFilesSubject(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/files/{id}', name: 'options_files_id', methods: ['OPTIONS'])]
+    public function optionsFilesId(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/files', name: 'options_files_all', methods: ['OPTIONS'])]
+    public function optionsFilesAll(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
         ]);
 

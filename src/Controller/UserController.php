@@ -46,12 +46,25 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/users', name: 'options_users', methods: ['OPTIONS'])]
-    public function optionsUsers(): Response
+    #[Route('/api/register', name: 'options_users_register', methods: ['OPTIONS'])]
+    public function optionsUsersRegister(): Response
     {
-        $response = new Response(null, 200, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, POST, DELETE, OPTIONS',
+            'Access-Control-Allow-Methods' => 'POST, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/users/{sub}', name: 'options_users_sub', methods: ['OPTIONS'])]
+    public function optionsUsersSub(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, DELETE, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
         ]);
 

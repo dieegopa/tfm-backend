@@ -105,12 +105,25 @@ class RatingController extends AbstractController
 
     }
 
-    #[Route('/ratings', name: 'options_ratings', methods: ['OPTIONS'])]
+    #[Route('/api/ratings', name: 'options_ratings', methods: ['OPTIONS'])]
     public function optionsRatings(): Response
     {
-        $response = new Response(null, 200, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Methods' => 'PATCH, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/ratings/{fileId}/{userSub}', name: 'options_ratings_file', methods: ['OPTIONS'])]
+    public function optionsRatingsFile(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
         ]);
 

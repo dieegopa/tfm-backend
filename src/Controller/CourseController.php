@@ -33,10 +33,10 @@ class CourseController extends AbstractController
 
     }
 
-    #[Route('/courses', name: 'options_courses', methods: ['OPTIONS'])]
+    #[Route('/free/courses/{degree}', name: 'options_courses', methods: ['OPTIONS'])]
     public function optionsCourses(): Response
     {
-        $response =  new Response(null, 200, [
+        $response =  new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type',

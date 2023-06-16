@@ -76,12 +76,25 @@ class SubjectController extends AbstractController
 
     }
 
-    #[Route('/subjects', name: 'options_subjects', methods: ['OPTIONS'])]
-    public function optionsSubjects(): Response
+    #[Route('/free/subjects/{subject}', name: 'options_subjects_subject', methods: ['OPTIONS'])]
+    public function optionsSubjectsSubject(): Response
     {
         $response =  new Response(null, 200, [
             'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/subjects/favorite', name: 'options_subjects_favorite', methods: ['OPTIONS'])]
+    public function optionsSubjectsFavorite(): Response
+    {
+        $response =  new Response(null, 200, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'PATCH, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
         ]);
 

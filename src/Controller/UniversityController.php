@@ -122,12 +122,51 @@ class UniversityController extends AbstractController
 
     }
 
-    #[Route('/universities', name: 'options_universities', methods: ['OPTIONS'])]
-    public function optionsUniversities(): Response
+    #[Route('/free/universities', name: 'options_universities_free', methods: ['OPTIONS'])]
+    public function optionsUniversitiesFree(): Response
     {
-        $response = new Response(null, 200, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET, PATCH, OPTIONS',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/free/universities/{slug}', name: 'options_universities_free_slug', methods: ['OPTIONS'])]
+    public function optionsUniversitiesFreeSlug(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/universities/favorite', name: 'options_universities_favorite', methods: ['OPTIONS'])]
+    public function optionsUniversitiesFavorite(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'PATCH, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+        ]);
+
+        return $response->send();
+
+    }
+
+    #[Route('/api/universities/favorite/{universityId}/{userSub}', name: 'options_universities_uni_user', methods: ['OPTIONS'])]
+    public function optionsUniversitiesUniUser(): Response
+    {
+        $response = new Response(null, 204, [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
         ]);
 
