@@ -23,7 +23,7 @@ class DegreeControllerTest extends KernelTestCase
         static::bootKernel();
 
         self::$client = new Client([
-            'base_uri' => 'https://127.0.0.1:8000',
+            'base_uri' => 'https://127.0.0.1',
             'defaults' => [
                 'exceptions' => false
             ]

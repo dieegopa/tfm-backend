@@ -9,7 +9,7 @@ on:
 name: Main Workflow
 jobs:
   symfony:
-    name: Symfony (PHP ${{ matrix.php-versions }})
+    name: Notekeeper Build
     runs-on: ubuntu-latest
     # Docs: https://docs.github.com/en/actions/using-containerized-services
     services:
