@@ -7,12 +7,14 @@ use App\Controller\DegreeController;
 use App\Controller\FileController;
 use App\Controller\RatingController;
 use App\Controller\RegisterController;
+use App\Controller\SubjectController;
 use App\Controller\UniversityController;
 use App\Controller\UserController;
 use App\Entity\Course;
 use App\Entity\Degree;
 use App\Entity\File;
 use App\Entity\Rating;
+use App\Entity\Subject;
 use App\Entity\University;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -55,6 +57,7 @@ class BaseTest extends KernelTestCase
         $this->universityController = new UniversityController();
         $this->ratingController = new RatingController();
         $this->registerController = new RegisterController();
+        $this->subjectController = new SubjectController();
 
         /** Entity Manager **/
         $this->entityManager = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
@@ -66,6 +69,7 @@ class BaseTest extends KernelTestCase
         $this->fileRepository = $this->entityManager->getRepository(File::class);
         $this->universityRepository = $this->entityManager->getRepository(University::class);
         $this->ratingRepository = $this->entityManager->getRepository(Rating::class);
+        $this->subjectRepository = $this->entityManager->getRepository(Subject::class);
 
         /** Serializer **/
         $this->serializer = static::$kernel->getContainer()->get('jms_serializer');

@@ -36,22 +36,18 @@ class FileController extends AbstractController
 
         $em = $doctrine->getManager();
 
-        try {
-            $file = new File();
-            $file->setName($fileName);
-            $file->setCategory($fileCategory);
-            $file->setUser($user);
-            $file->setType($fileType);
-            $file->setExtra($fileExtra);
-            $file->setSubject($subject);
-            $file->setUrl($fileUrl);
-            $file->setUniqueName($uniqueName);
+        $file = new File();
+        $file->setName($fileName);
+        $file->setCategory($fileCategory);
+        $file->setUser($user);
+        $file->setType($fileType);
+        $file->setExtra($fileExtra);
+        $file->setSubject($subject);
+        $file->setUrl($fileUrl);
+        $file->setUniqueName($uniqueName);
 
-            $em->persist($file);
-            $em->flush();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
-        }
+        $em->persist($file);
+        $em->flush();
 
 
         return new Response(json_encode(['message' => ['Uploaded']]), 200, ['Content-Type' => 'application/json']);
@@ -79,20 +75,16 @@ class FileController extends AbstractController
     #[Route('/api/files/university/{id}', name: 'index_university_files', methods: ['GET'])]
     public function indexUniversityFiles(FileRepository $fileRepository, SerializerInterface $serializer, $id)
     {
-        try {
-            $files = $fileRepository->createQueryBuilder('f')
-                ->join('f.subject', 's')
-                ->join('s.degrees', 'd')
-                ->join('d.university', 'u')
-                ->join('f.user', 'us')
-                ->where('u.id = :id')
-                ->setParameter('id', $id)
-                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
-                ->getQuery()
-                ->getResult();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
-        }
+        $files = $fileRepository->createQueryBuilder('f')
+            ->join('f.subject', 's')
+            ->join('s.degrees', 'd')
+            ->join('d.university', 'u')
+            ->join('f.user', 'us')
+            ->where('u.id = :id')
+            ->setParameter('id', $id)
+            ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
+            ->getQuery()
+            ->getResult();
 
         $response = $serializer->serialize($files, 'json');
 
@@ -105,19 +97,15 @@ class FileController extends AbstractController
     #[Route('/api/files/degree/{id}', name: 'index_degree_files', methods: ['GET'])]
     public function indexDegreeFiles(FileRepository $fileRepository, SerializerInterface $serializer, $id)
     {
-        try {
-            $files = $fileRepository->createQueryBuilder('f')
-                ->join('f.subject', 's')
-                ->join('s.degrees', 'd')
-                ->join('f.user', 'us')
-                ->where('d.id = :id')
-                ->setParameter('id', $id)
-                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
-                ->getQuery()
-                ->getResult();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
-        }
+        $files = $fileRepository->createQueryBuilder('f')
+            ->join('f.subject', 's')
+            ->join('s.degrees', 'd')
+            ->join('f.user', 'us')
+            ->where('d.id = :id')
+            ->setParameter('id', $id)
+            ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
+            ->getQuery()
+            ->getResult();
 
         $response = $serializer->serialize($files, 'json');
 
@@ -130,18 +118,14 @@ class FileController extends AbstractController
     #[Route('/api/files/subject/{id}', name: 'index_subject_files', methods: ['GET'])]
     public function indexSubjectFiles(FileRepository $fileRepository, SerializerInterface $serializer, $id)
     {
-        try {
-            $files = $fileRepository->createQueryBuilder('f')
-                ->join('f.subject', 's')
-                ->join('f.user', 'us')
-                ->where('s.id = :id')
-                ->setParameter('id', $id)
-                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
-                ->getQuery()
-                ->getResult();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
-        }
+        $files = $fileRepository->createQueryBuilder('f')
+            ->join('f.subject', 's')
+            ->join('f.user', 'us')
+            ->where('s.id = :id')
+            ->setParameter('id', $id)
+            ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'us.email as user')
+            ->getQuery()
+            ->getResult();
 
         $response = $serializer->serialize($files, 'json');
 
@@ -154,18 +138,14 @@ class FileController extends AbstractController
     #[Route('/api/files/{id}', name: 'index_file', methods: ['GET'])]
     public function indexFile(FileRepository $fileRepository, SerializerInterface $serializer, $id)
     {
-        try {
-            $file = $fileRepository->createQueryBuilder('f')
-                ->join('f.user', 'u')
-                ->leftJoin('f.ratings', 'r')
-                ->where('f.id = :id')
-                ->setParameter('id', $id)
-                ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'u.sub as user', 'COALESCE(AVG(r.value), 0) as rating')
-                ->getQuery()
-                ->getSingleResult();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
-        }
+        $file = $fileRepository->createQueryBuilder('f')
+            ->join('f.user', 'u')
+            ->leftJoin('f.ratings', 'r')
+            ->where('f.id = :id')
+            ->setParameter('id', $id)
+            ->select('f.id', 'f.name', 'f.category', 'f.type', 'f.extra', 'f.url', 'u.sub as user', 'COALESCE(AVG(r.value), 0) as rating')
+            ->getQuery()
+            ->getSingleResult();
 
         $response = $serializer->serialize($file, 'json');
 
@@ -230,15 +210,11 @@ class FileController extends AbstractController
 
         $em = $doctrine->getManager();
 
-        try {
-            $file->setName($fileName);
-            $file->setCategory($fileCategory);
-            $file->setExtra($fileExtra);
-            $em->persist($file);
-            $em->flush();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['message' => $e->getMessage()]), 412, ['Content-Type' => 'application/json']);
-        }
+        $file->setName($fileName);
+        $file->setCategory($fileCategory);
+        $file->setExtra($fileExtra);
+        $em->persist($file);
+        $em->flush();
 
         return new Response(json_encode(['message' => ['Uploaded']]), 200, ['Content-Type' => 'application/json']);
 
