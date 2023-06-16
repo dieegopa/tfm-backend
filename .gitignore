@@ -20,3 +20,5 @@
 ###< phpunit/phpunit ###
 
 /public/uploads/
+./reports/*
+/reports/*
