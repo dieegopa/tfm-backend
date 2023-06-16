@@ -30,8 +30,8 @@ jobs:
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
-            php-version: '8.1'
-            coverage: xdebug
+          php-version: '8.1'
+          coverage: xdebug
 
       - name: Install dependencies with composer
         run: composer update --no-ansi --no-interaction --no-progress
@@ -51,7 +51,7 @@ jobs:
             -D sonar.projectKey=dieegopa_tfm-backend
             -D sonar.organization=dieegopa
             -D sonar.php.coverage.reportPaths=coverage.xml
-            -D sonar.exclusions=tests/**,tests/Controller/**,src/Admin/**,src/Factory/**
+            -D sonar.exclusions=tests/**,tests/Controller/**,src/Controller/Admin/**,src/Factory/**,src/Admin/**,src/DataFixtures/**,src/Entity/**,src/Repository/**,config/**,public/**,migrations/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
