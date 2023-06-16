@@ -2,24 +2,12 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\CourseController;
-use App\Entity\Course;
 use App\Factory\CourseFactory;
 use App\Factory\DegreeFactory;
-use GuzzleHttp\Client;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use App\Tests\BaseTest;
 
-class CourseControllerTest extends KernelTestCase
+class CourseControllerTest extends BaseTest
 {
-    use ResetDatabase, Factories;
-
-    protected function setUp(): void
-    {
-        self::bootKernel();
-        parent::setUp();
-    }
 
     public function testIndexCourseDegrees()
     {
@@ -36,13 +24,7 @@ class CourseControllerTest extends KernelTestCase
             'degree' => $degree,
         ]);
 
-        $courseController = new CourseController();
-
-        $entityManager = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $courseRepository = $entityManager->getRepository(Course::class);
-        $serializer = static::$kernel->getContainer()->get('jms_serializer');
-
-        $response = $courseController->indexCourseDegrees($courseRepository, $serializer, 'degree1');
+        $response = $this->courseController->indexCourseDegrees($this->courseRepository, $this->serializer, 'degree1');
         $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -55,12 +37,7 @@ class CourseControllerTest extends KernelTestCase
     public function testIndexCourseDegreesNotFound()
     {
 
-        $courseController = new CourseController();
-        $entityManager = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $courseRepository = $entityManager->getRepository(Course::class);
-        $serializer = static::$kernel->getContainer()->get('jms_serializer');
-
-        $response = $courseController->indexCourseDegrees($courseRepository, $serializer, 'degree1');
+        $response = $this->courseController->indexCourseDegrees($this->courseRepository, $this->serializer, 'degree1');
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('Not Found', json_decode($response->getContent(), true)['message']);
@@ -69,8 +46,7 @@ class CourseControllerTest extends KernelTestCase
 
     public function testOptions()
     {
-        $courseController = new CourseController();
-        $response = $courseController->optionsCourses();
+        $response = $this->courseController->optionsCourses();
 
         $this->assertEquals(204, $response->getStatusCode());
         $this->assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
