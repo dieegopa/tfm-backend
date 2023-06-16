@@ -51,6 +51,7 @@ jobs:
             -D sonar.projectKey=dieegopa_tfm-backend
             -D sonar.organization=dieegopa
             -D sonar.php.coverage.reportPaths=coverage.xml
+            -D sonar.exclusions=tests/**,tests/Controller/**,src/Admin/**,src/Factory/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
