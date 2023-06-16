@@ -22,8 +22,10 @@ class CourseControllerTest extends KernelTestCase
 
         static::bootKernel();
 
+        $githubServerUrl = getenv('GITHUB_SERVER_URL');
+
         self::$client = new Client([
-            'base_uri' => 'https://127.0.0.1:8080',
+            'base_uri' => $githubServerUrl,
             'defaults' => [
                 'exceptions' => false
             ]

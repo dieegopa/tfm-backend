@@ -73,8 +73,6 @@ jobs:
         env:
           DATABASE_URL: mysql://root:@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/notekeeper
           DATABASE_URL_TEST: mysql://root:@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/notekeeper_test
-        ports:
-          - 8080/tcp
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         with:
