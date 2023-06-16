@@ -96,12 +96,8 @@ class RatingController extends AbstractController
             return new Response(json_encode(['rating' => 0]), 200, ['Content-Type' => 'application/json']);
         }
 
-        if (!$rating) {
-            return new Response(json_encode(['rating' => 0]), 404, ['Content-Type' => 'application/json']);
-        } else {
-            $response = $serializer->serialize($rating, 'json');
-            return new Response($response, 200, ['Content-Type' => 'application/json']);
-        }
+        $response = $serializer->serialize($rating, 'json');
+        return new Response($response, 200, ['Content-Type' => 'application/json']);
 
     }
 

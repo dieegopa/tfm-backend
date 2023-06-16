@@ -25,8 +25,11 @@
 
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">src</directory>
+            <directory suffix=".php">src/Controller</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">src/Controller/Admin</directory>
+        </exclude>
     </coverage>
 
     <listeners>
