@@ -90,7 +90,7 @@ class DegreeController extends AbstractController
         $response =  new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+            'Access-Control-Allow-Headers' => 'Content-Type',
         ]);
 
         return $response->send();
@@ -103,7 +103,7 @@ class DegreeController extends AbstractController
         $response =  new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
+            'Access-Control-Allow-Headers' => 'Content-Type',
         ]);
 
         return $response->send();
