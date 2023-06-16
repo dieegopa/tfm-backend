@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\SubjectRepository;
-use App\Repository\UniversityRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerInterface;
@@ -63,14 +62,10 @@ class SubjectController extends AbstractController
             $favorite = true;
         }
 
-        try {
-            $em = $doctrine->getManager();
-            $em->persist($user);
-            $em->persist($subject);
-            $em->flush();
-        } catch (\Exception $e) {
-            return new Response(json_encode(['favorite' => true]), 500, ['Content-Type' => 'application/json']);
-        }
+        $em = $doctrine->getManager();
+        $em->persist($user);
+        $em->persist($subject);
+        $em->flush();
 
         return new Response(json_encode(['favorite' => $favorite]), 200, ['Content-Type' => 'application/json']);
 
@@ -79,7 +74,7 @@ class SubjectController extends AbstractController
     #[Route('/free/subjects/{subject}', name: 'options_subjects_subject', methods: ['OPTIONS'])]
     public function optionsSubjectsSubject(): Response
     {
-        $response =  new Response(null, 200, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
@@ -92,7 +87,7 @@ class SubjectController extends AbstractController
     #[Route('/api/subjects/favorite', name: 'options_subjects_favorite', methods: ['OPTIONS'])]
     public function optionsSubjectsFavorite(): Response
     {
-        $response =  new Response(null, 200, [
+        $response = new Response(null, 204, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'PATCH, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Authorization',
