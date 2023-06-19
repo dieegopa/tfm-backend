@@ -789,6 +789,8 @@ nelmio_api_doc:
               description: Ok, no content
       /admin:
         post:
+          security:
+            - bearerAuth: [ ]
           tags:
             - Admin
           summary: Create entity (Admin)
@@ -902,6 +904,8 @@ nelmio_api_doc:
             404:
               description: Not found
         get:
+          security:
+            - bearerAuth: [ ]
           tags:
             - Admin
           summary: List entity (Admin)
@@ -922,6 +926,8 @@ nelmio_api_doc:
             404:
               description: Not found
         patch:
+          security:
+            - bearerAuth: [ ]
           tags:
             - Admin
           summary: Update entity (Admin)
@@ -1038,6 +1044,8 @@ nelmio_api_doc:
             404:
               description: Not found
         delete:
+          security:
+            - bearerAuth: [ ]
           tags:
             - Admin
           summary: Delete entity (Admin)
@@ -1059,6 +1067,17 @@ nelmio_api_doc:
                   properties:
                     token:
                       type: string
+          responses:
+            200:
+              description: Ok
+            404:
+              description: Not found
+        options:
+          security:
+            - bearerAuth: [ ]
+          tags:
+            - Admin
+          summary: Get options
           responses:
             200:
               description: Ok
