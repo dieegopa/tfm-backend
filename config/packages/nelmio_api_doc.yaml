@@ -787,6 +787,283 @@ nelmio_api_doc:
           responses:
             204:
               description: Ok, no content
+      /admin:
+        post:
+          tags:
+            - Admin
+          summary: Create entity (Admin)
+          parameters:
+            - name: crudAction
+              in: query
+              required: true
+            - name: crudControllerFqcn
+              in: query
+              required: true
+            - name: referrer
+              in: query
+              required: true
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  type: object
+                  properties:
+                    ea[NewForm][btn]:
+                      type: string
+                    referrer:
+                      type: string
+                    University[name]:
+                      type: string
+                    University[slug]:
+                      type: string
+                    University[image_url]:
+                      type: string
+                    University[_token]:
+                      type: string
+                    Rating[value]:
+                      type: integer
+                      format: int64
+                    Rating[file]:
+                      type: integer
+                      format: int64
+                    Rating[_token]:
+                      type: string
+                    Degree[name]:
+                      type: string
+                    Degree[slug]:
+                      type: string
+                    Degree[_token]:
+                      type: string
+                    Degree[school]:
+                      type: string
+                    Degree[university]:
+                      type: integer
+                      format: int64
+                    Subject[name]:
+                      type: string
+                    Subject[slug]:
+                      type: string
+                    Subject[_token]:
+                      type: string
+                    Subject[course]:
+                      type: integer
+                      format: int64
+                    File[name]:
+                      type: string
+                    File[type]:
+                      type: string
+                    File[user]:
+                      type: integer
+                      format: int64
+                    File[subject]:
+                      type: integer
+                      format: int64
+                    File[category]:
+                      type: string
+                    File[extra]:
+                      type: string
+                    File[url]:
+                      type: string
+                    File[uniqueName]:
+                      type: string
+                    File[_token]:
+                      type: string
+                    Course[name]:
+                      type: string
+                    Course[slug]:
+                      type: string
+                    Course[degree]:
+                      type: integer
+                      format: int64
+                    Course[_token]:
+                      type: string
+                    Course[number]:
+                      type: integer
+                      format: int64
+                    User[email]:
+                      type: string
+                    User[sub]:
+                      type: string
+                    User[roles]:
+                      type: array
+                      items:
+                        type: string
+                    User[_token]:
+                      type: string
+                    Staff[email]:
+                      type: string
+                    Staff[password]:
+                      type: string
+                    Staff[_token]:
+                      type: string
+          responses:
+            200:
+              description: Ok
+            404:
+              description: Not found
+        get:
+          tags:
+            - Admin
+          summary: List entity (Admin)
+          parameters:
+            - name: crudAction
+              in: query
+              required: true
+            - name: crudControllerFqcn
+              in: query
+              required: true
+          responses:
+            200:
+              description: Ok
+              content:
+                text/html:
+                  schema:
+                    type: string
+            404:
+              description: Not found
+        patch:
+          tags:
+            - Admin
+          summary: Update entity (Admin)
+          parameters:
+            - name: crudAction
+              in: query
+              required: true
+            - name: crudControllerFqcn
+              in: query
+              required: true
+            - name: referrer
+              in: query
+              required: true
+            - name: entityId
+              in: query
+              required: true
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  type: object
+                  properties:
+                    ea[EditForm][btn]:
+                      type: string
+                    referrer:
+                      type: string
+                    University[name]:
+                      type: string
+                    University[slug]:
+                      type: string
+                    University[image_url]:
+                      type: string
+                    University[_token]:
+                      type: string
+                    Rating[value]:
+                      type: integer
+                      format: int64
+                    Rating[file]:
+                      type: integer
+                      format: int64
+                    Rating[_token]:
+                      type: string
+                    Degree[name]:
+                      type: string
+                    Degree[slug]:
+                      type: string
+                    Degree[_token]:
+                      type: string
+                    Degree[school]:
+                      type: string
+                    Degree[university]:
+                      type: integer
+                      format: int64
+                    Subject[name]:
+                      type: string
+                    Subject[slug]:
+                      type: string
+                    Subject[_token]:
+                      type: string
+                    Subject[course]:
+                      type: integer
+                      format: int64
+                    File[name]:
+                      type: string
+                    File[type]:
+                      type: string
+                    File[user]:
+                      type: integer
+                      format: int64
+                    File[subject]:
+                      type: integer
+                      format: int64
+                    File[category]:
+                      type: string
+                    File[extra]:
+                      type: string
+                    File[url]:
+                      type: string
+                    File[uniqueName]:
+                      type: string
+                    File[_token]:
+                      type: string
+                    Course[name]:
+                      type: string
+                    Course[slug]:
+                      type: string
+                    Course[degree]:
+                      type: integer
+                      format: int64
+                    Course[_token]:
+                      type: string
+                    Course[number]:
+                      type: integer
+                      format: int64
+                    User[email]:
+                      type: string
+                    User[sub]:
+                      type: string
+                    User[roles]:
+                      type: array
+                      items:
+                        type: string
+                    User[_token]:
+                      type: string
+                    Staff[email]:
+                      type: string
+                    Staff[password]:
+                      type: string
+                    Staff[_token]:
+                      type: string
+          responses:
+            200:
+              description: Ok
+            404:
+              description: Not found
+        delete:
+          tags:
+            - Admin
+          summary: Delete entity (Admin)
+          parameters:
+            - name: crudAction
+              in: query
+              required: true
+            - name: crudControllerFqcn
+              in: query
+              required: true
+            - name: entityId
+              in: query
+              required: true
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+          responses:
+            200:
+              description: Ok
+            404:
+              description: Not found
     tags:
       - name: Courses
         description: Courses management
